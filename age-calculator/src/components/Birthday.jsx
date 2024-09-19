@@ -8,34 +8,44 @@ function Birthday() {
   const [monthResult, setMonthResult] = useState(0);
   const [yearsResult, setYearsResult] = useState(0);
   const [daysResult, setDaysResult] = useState(0);
+  const [isCalculed, setIsCalculted] = useState(false);
 
   const dateToday = new Date();
-  const dateBirth = new Date(years, months - 1, days);
+  const birthDate = new Date(years, months - 1, days);
 
-  const differenceYears = () => {
+  const calculAge = () => {
     const yearToday = dateToday.getFullYear();
-    const yearBirth = dateBirth.getFullYear();
-    const yearDifference = yearToday - yearBirth;
+    const monthToday = dateToday.getMonth();
+    const dayToday = dateToday.getDate();
 
-    return setYearsResult(yearDifference);
-  };
+    const yearBirth = birthDate.getFullYear();
+    const monthBirth = birthDate.getMonth();
+    const dayBirth = birthDate.getDate();
 
-  const differenceMonth = () => {
-    const monthToday = dateToday.getMonth() + 1;
-    const monthBirth = dateBirth.getMonth() + 1;
-    const monthDifference = monthToday - monthBirth;
+    let year = yearToday - yearBirth;
+    let month = monthToday - monthBirth;
+    let day = dayToday - dayBirth;
 
-    if (monthDifference < 0) {
-      return setMonthResult(Math.abs(monthDifference));
-    } else {
-      return setMonthResult(monthDifference);
+    if (day < 0) {
+      month--;
+      const lastMonth = new Date(yearToday, monthToday - 1, 0);
+      day += lastMonth.getDate();
     }
+
+    if (month < 0) {
+      year--;
+      month += 12;
+    }
+
+    setYearsResult(year);
+    setMonthResult(month);
+    setDaysResult(day);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    differenceMonth();
-    differenceYears();
+    calculAge();
+    setIsCalculted(true);
   };
 
   return (
@@ -49,7 +59,9 @@ function Birthday() {
                 type="text"
                 id="day"
                 value={days}
+                maxLength="2"
                 onChange={(e) => setDays(e.target.value)}
+                placeholder="DD"
               />
             </span>
             <span>
@@ -58,6 +70,8 @@ function Birthday() {
                 type="text"
                 id="month"
                 value={months}
+                maxLength="2"
+                placeholder="MM"
                 onChange={(e) => setMonths(e.target.value)}
               />
             </span>
@@ -67,7 +81,9 @@ function Birthday() {
                 type="text"
                 id="year"
                 value={years}
+                maxLength="4"
                 onChange={(e) => setYears(e.target.value)}
+                placeholder="YYYY"
               />
             </span>
           </div>
@@ -85,15 +101,15 @@ function Birthday() {
 
         <div className="result_container">
           <span>
-            <h1 className="result">{yearsResult}</h1>
+            <h1 className="result">{isCalculed ? yearsResult : "--"}</h1>
             <h1 className="unit">years</h1>
           </span>
           <span>
-            <h1 className="result">{monthResult}</h1>
+            <h1 className="result">{isCalculed ? monthResult : "--"}</h1>
             <h1 className="unit">months</h1>
           </span>
           <span>
-            <h1 className="result">{daysResult}</h1>
+            <h1 className="result">{isCalculed ? daysResult : "--"}</h1>
             <h1 className="unit">days</h1>
           </span>
         </div>
