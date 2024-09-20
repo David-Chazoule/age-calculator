@@ -23,8 +23,6 @@ function Birthday() {
   //create a new date object with data recorded by the user
   const birthDate = new Date(years, months - 1, days);
 
-
-  
   const handleSubmit = (e) => {
     e.preventDefault();
 
