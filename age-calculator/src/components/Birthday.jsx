@@ -18,8 +18,11 @@ function Birthday() {
   const [isCalculed, setIsCalculted] = useState(false);
   const [errors, setErrors] = useState({ day: "", month: "", year: "" });
 
+  // get the current date
   const dateToday = new Date();
+  //create a new date object with data recorded by the user
   const birthDate = new Date(years, months - 1, days);
+
 
   
   const handleSubmit = (e) => {
@@ -39,8 +42,22 @@ function Birthday() {
       return;
     }
 
-    calculAge(dateToday,birthDate,setYearsResult,setMonthResult,setDaysResult);
+    calculAge(
+      dateToday,
+      birthDate,
+      setYearsResult,
+      setMonthResult,
+      setDaysResult
+    );
     setIsCalculted(true);
+  };
+
+  //this function only authorizes the writing of numbers
+  const handleNumericInput = (e, setState) => {
+    const value = e.target.value;
+
+    const numericValue = value.replace(/\D/g, "");
+    setState(numericValue);
   };
 
   return (
@@ -56,10 +73,12 @@ function Birthday() {
                 className={errors.day ? "error-input" : ""}
                 value={days}
                 maxLength="2"
-                onChange={(e) => setDays(e.target.value)}
                 placeholder="DD"
+                onChange={(e) => handleNumericInput(e, setDays)}
               />
-              {errors.day && <p className="error">{errors.day}</p>}
+              <div className="box-error">
+                {errors.day && <p className="error">{errors.day}</p>}
+              </div>
             </span>
             <span>
               <label className={errors.month ? "error-label" : ""}>MONTH</label>
@@ -70,9 +89,11 @@ function Birthday() {
                 value={months}
                 maxLength="2"
                 placeholder="MM"
-                onChange={(e) => setMonths(e.target.value)}
+                onChange={(e) => handleNumericInput(e, setMonths)}
               />
-              {errors.month && <p className="error">{errors.month}</p>}
+              <div className="box-error">
+                {errors.month && <p className="error">{errors.month}</p>}
+              </div>
             </span>
             <span>
               <label className={errors.year ? "error-label" : ""}>YEAR</label>
@@ -82,10 +103,12 @@ function Birthday() {
                 className={errors.year ? "error-input" : ""}
                 value={years}
                 maxLength="4"
-                onChange={(e) => setYears(e.target.value)}
                 placeholder="YYYY"
+                onChange={(e) => handleNumericInput(e, setYears)}
               />
-              {errors.year && <p className="error">{errors.year}</p>}
+              <div className="box-error">
+                {errors.year && <p className="error">{errors.year}</p>}
+              </div>
             </span>
           </div>
           <div className="seperate-btn-box">

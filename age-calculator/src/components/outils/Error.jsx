@@ -1,4 +1,3 @@
-
 // Function to validate the 'day' input
 export const validateDay = (
   days,

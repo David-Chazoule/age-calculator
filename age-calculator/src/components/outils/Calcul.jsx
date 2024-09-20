@@ -1,4 +1,13 @@
- export const calculAge = ( dateToday, birthDate,setYearsResult,setMonthResult,setDaysResult) => {
+
+//function which calculates the age, in year, month and day of the user
+
+export const calculAge = (
+  dateToday,
+  birthDate,
+  setYearsResult,
+  setMonthResult,
+  setDaysResult
+) => {
   const yearToday = dateToday.getFullYear();
   const monthToday = dateToday.getMonth();
   const dayToday = dateToday.getDate();
