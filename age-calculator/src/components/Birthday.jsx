@@ -1,5 +1,12 @@
 import React, { useState } from "react";
 import arrow from "../assets/images/icon-arrow.svg";
+import {
+  validateDay,
+  isValidDayForMonth,
+  validateMonth,
+  validateYear,
+} from "./outils/Error";
+import { calculAge } from "./outils/Calcul";
 
 function Birthday() {
   const [days, setDays] = useState("");
@@ -9,42 +16,30 @@ function Birthday() {
   const [yearsResult, setYearsResult] = useState(0);
   const [daysResult, setDaysResult] = useState(0);
   const [isCalculed, setIsCalculted] = useState(false);
+  const [errors, setErrors] = useState({ day: "", month: "", year: "" });
 
   const dateToday = new Date();
   const birthDate = new Date(years, months - 1, days);
 
-  const calculAge = () => {
-    const yearToday = dateToday.getFullYear();
-    const monthToday = dateToday.getMonth();
-    const dayToday = dateToday.getDate();
-
-    const yearBirth = birthDate.getFullYear();
-    const monthBirth = birthDate.getMonth();
-    const dayBirth = birthDate.getDate();
-
-    let year = yearToday - yearBirth;
-    let month = monthToday - monthBirth;
-    let day = dayToday - dayBirth;
-
-    if (day < 0) {
-      month--;
-      const lastMonth = new Date(yearToday, monthToday - 1, 0);
-      day += lastMonth.getDate();
-    }
-
-    if (month < 0) {
-      year--;
-      month += 12;
-    }
-
-    setYearsResult(year);
-    setMonthResult(month);
-    setDaysResult(day);
-  };
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-    calculAge();
+
+    const isDayValid = validateDay(
+      days,
+      months,
+      years,
+      isValidDayForMonth,
+      setErrors
+    );
+    const isMonthValid = validateMonth(months, setErrors);
+    const isYearValid = validateYear(years, dateToday, setErrors);
+
+    if (!isDayValid || !isMonthValid || !isYearValid) {
+      return;
+    }
+
+    calculAge(dateToday,birthDate,setYearsResult,setMonthResult,setDaysResult);
     setIsCalculted(true);
   };
 
@@ -54,37 +49,43 @@ function Birthday() {
         <form onSubmit={handleSubmit}>
           <div>
             <span>
-              <label>DAY</label>
+              <label className={errors.day ? "error-label" : ""}>DAY</label>
               <input
                 type="text"
                 id="day"
+                className={errors.day ? "error-input" : ""}
                 value={days}
                 maxLength="2"
                 onChange={(e) => setDays(e.target.value)}
                 placeholder="DD"
               />
+              {errors.day && <p className="error">{errors.day}</p>}
             </span>
             <span>
-              <label>MONTH</label>
+              <label className={errors.month ? "error-label" : ""}>MONTH</label>
               <input
                 type="text"
                 id="month"
+                className={errors.month ? "error-input" : ""}
                 value={months}
                 maxLength="2"
                 placeholder="MM"
                 onChange={(e) => setMonths(e.target.value)}
               />
+              {errors.month && <p className="error">{errors.month}</p>}
             </span>
             <span>
-              <label>YEAR</label>
+              <label className={errors.year ? "error-label" : ""}>YEAR</label>
               <input
                 type="text"
                 id="year"
+                className={errors.year ? "error-input" : ""}
                 value={years}
                 maxLength="4"
                 onChange={(e) => setYears(e.target.value)}
                 placeholder="YYYY"
               />
+              {errors.year && <p className="error">{errors.year}</p>}
             </span>
           </div>
           <div className="seperate-btn-box">

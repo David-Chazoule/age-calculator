@@ -19,8 +19,12 @@
 
           label {
             font-size: 14px;
-
+            letter-spacing: 2px;
             color: $Smokeygrey;
+          }
+
+          .error-label{
+            color: $lightred;
           }
 
           input {
@@ -42,6 +46,10 @@
               outline: none;
             }
           }
+
+          .error-input{
+            border: 1px solid $lightred;
+           }
         }
       }
     }
@@ -109,4 +117,11 @@
       }
     }
   }
+
+  .error{
+    color: $lightred;
+    font-size: 12px ;
+  }
+
+  
 }
