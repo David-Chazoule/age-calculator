@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import arrow from "../assets/images/icon-arrow.svg";
 import {
   validateDay,
@@ -17,6 +17,11 @@ function Birthday() {
   const [daysResult, setDaysResult] = useState(0);
   const [isCalculed, setIsCalculted] = useState(false);
   const [errors, setErrors] = useState({ day: "", month: "", year: "" });
+
+  // States for animated display
+  const [displayYearsResult, setDisplayYearsResult] = useState(0);
+  const [displayMonthResult, setDisplayMonthResult] = useState(0);
+  const [displayDaysResult, setDisplayDaysResult] = useState(0);
 
   // get the current date
   const dateToday = new Date();
@@ -49,6 +54,54 @@ function Birthday() {
     );
     setIsCalculted(true);
   };
+
+  // Animation effect for results
+  useEffect(() => {
+    if (isCalculed) {
+      // Animate years result
+      let yearsInterval = setInterval(() => {
+        setDisplayYearsResult((prev) => {
+          if (prev < yearsResult) {
+            return Math.min(prev + 1, yearsResult); // Increment by 1
+          } else {
+            clearInterval(yearsInterval);
+            return yearsResult; // Ensure it reaches the final value
+          }
+        });
+      }, 50); // Adjust speed of the animation
+
+      // Animate months result
+      let monthsInterval = setInterval(() => {
+        setDisplayMonthResult((prev) => {
+          if (prev < monthResult) {
+            return Math.min(prev + 1, monthResult); // Increment by 1
+          } else {
+            clearInterval(monthsInterval);
+            return monthResult; // Ensure it reaches the final value
+          }
+        });
+      }, 50); // Adjust speed of the animation
+
+      // Animate days result
+      let daysInterval = setInterval(() => {
+        setDisplayDaysResult((prev) => {
+          if (prev < daysResult) {
+            return Math.min(prev + 1, daysResult); // Increment by 1
+          } else {
+            clearInterval(daysInterval);
+            return daysResult; // Ensure it reaches the final value
+          }
+        });
+      }, 50); // Adjust speed of the animation
+
+      // Cleanup intervals on component unmount or when isCalculed changes
+      return () => {
+        clearInterval(yearsInterval);
+        clearInterval(monthsInterval);
+        clearInterval(daysInterval);
+      };
+    }
+  }, [yearsResult, monthResult, daysResult, isCalculed]);
 
   //this function only authorizes the writing of numbers
   const handleNumericInput = (e, setState) => {
@@ -123,15 +176,15 @@ function Birthday() {
 
         <div className="result_container">
           <span>
-            <h1 className="result">{isCalculed ? yearsResult : "--"}</h1>
+            <h1 className="result">{isCalculed ? displayYearsResult : "--"}</h1>
             <h1 className="unit">years</h1>
           </span>
           <span>
-            <h1 className="result">{isCalculed ? monthResult : "--"}</h1>
+            <h1 className="result">{isCalculed ? displayMonthResult : "--"}</h1>
             <h1 className="unit">months</h1>
           </span>
           <span>
-            <h1 className="result">{isCalculed ? daysResult : "--"}</h1>
+            <h1 className="result">{isCalculed ? displayDaysResult : "--"}</h1>
             <h1 className="unit">days</h1>
           </span>
         </div>
