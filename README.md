@@ -3,7 +3,7 @@
 <img src="https://i.imgur.com/bdTNEQb.png" alt="age calculator empty" style="width:400px; height:auto;">    <img src="https://i.imgur.com/O8Tgs61.png" alt="result screen" style="width:400px; height:auto;">
 
 
-This is my solution to the [Mortgage Repayment Calculator Challenge](https://www.frontendmentor.io/challenges/age-calculator-app-dF9DFFpj-Q) on Frontend Mentor.
+This is my solution to the [Age Calculator Challenge](https://www.frontendmentor.io/challenges/age-calculator-app-dF9DFFpj-Q) on Frontend Mentor.
 
 [Online here](https://david-chazoule.github.io/age-calculator/)
 
